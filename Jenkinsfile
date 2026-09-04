@@ -10,9 +10,10 @@ pipeline {
             }
         }
         stage('Test') {
-            steps {
-                sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
-            }
+    steps {
+        sh 'python3 -m pytest --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+    }
+}
             post {
                 always {
                     junit 'test-reports/results.xml'
