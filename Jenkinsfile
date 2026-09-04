@@ -20,14 +20,32 @@ pipeline {
             }
         }
         stage('Deliver') {
-    steps {
-        sh 'python3 -m PyInstaller --onefile sources/add2vals.py'
+            steps {
+                sh 'python3 -m PyInstaller --onefile sources/add2vals.py'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/add2vals'
+                }
+            }
+        }
+        stage('Deploy to AWS') {
+            steps {
+                // Uses the SSH Agent plugin to securely connect to the EC2 instance using a private key credential stored in Jenkins
+                sshagent(credentials: ['sel2']) {
+                    sh '''
+                        echo "Copying binary to AWS EC2 instance..."
+                        
+                        // Copy the compiled binary via SCP to your EC2 instance (replace ubuntu@your-ec2-public-ip with your user and host)
+                        scp -o StrictHostKeyChecking=no dist/add2vals ubuntu@your-ec2-public-ip:/tmp/add2vals
+                        
+                        // Move the binary to a system path and set permissions on the remote server
+                        ssh -o StrictHostKeyChecking=no ubuntu@your-ec2-public-ip 'sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals'
+                        
+                        echo "Deployment to AWS completed successfully!"
+                    '''
+                }
+            }
+        }
     }
-    post {
-        success {
-            archiveArtifacts 'dist/add2vals'
-           }
-       }
-    }
-  }
 }
