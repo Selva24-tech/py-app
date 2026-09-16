@@ -1,15 +1,15 @@
 pipeline {
     agent any
-    options {
-        skipStagesAfterUnstable()
-    }
     stages {
-            stage('Install Dependencies') {
-    steps {
-        sh 'pip3 install pytest'
-        sh 'pip3 install pyinstaller'
-    }
-}
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    python3 -m venv venv
+                    ./venv/bin/pip install --upgrade pip
+                    ./venv/bin/pip install pytest pyinstaller
+                '''
+            }
+        }
     
         stage('Build') {
             steps {
