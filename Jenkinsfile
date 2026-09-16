@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deploy to AWS') {
             steps {
-                sshagent(credentials: ['sel2']) {
+                sshagent(credentials: ['sla32']) {
                     sh '''
                         echo "Copying binary to AWS EC2 instance..."
                         
