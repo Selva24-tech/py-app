@@ -4,6 +4,13 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
+            stage('Install Dependencies') {
+    steps {
+        sh 'pip3 install pytest'
+        sh 'pip3 install pyinstaller'
+    }
+}
+    
         stage('Build') {
             steps {
                 sh 'python3 -m py_compile sources/add2vals.py sources/calc.py'
@@ -29,16 +36,6 @@ pipeline {
                 }
             }
         }
-        stage('Install Dependencies') {
-    steps {
-        sh 'pip3 install pytest'
-    }
-}
-        stage('Install Dependencies1') {
-    steps {
-        sh 'pip3 install pyinstaller'
-    }
-}
         stage('Deploy to AWS') {
             steps {
                 sshagent(credentials: ['sla32']) {
