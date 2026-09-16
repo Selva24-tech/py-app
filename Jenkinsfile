@@ -34,6 +34,11 @@ pipeline {
         sh 'pip3 install pytest'
     }
 }
+        stage('Install Dependencies') {
+    steps {
+        sh 'pip3 install pyinstaller'
+    }
+}
         stage('Deploy to AWS') {
             steps {
                 sshagent(credentials: ['sla32']) {
