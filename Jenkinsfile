@@ -34,7 +34,7 @@ pipeline {
         sh 'pip3 install pytest'
     }
 }
-        stage('Install Dependencies') {
+        stage('Install Dependencies1') {
     steps {
         sh 'pip3 install pyinstaller'
     }
