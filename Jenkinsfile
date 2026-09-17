@@ -43,10 +43,10 @@ pipeline {
                         echo "Copying binary to AWS EC2 instance..."
                         
                         # Copy the compiled binary via SCP to your EC2 instance
-                        scp -o StrictHostKeyChecking=no dist/add2vals ubuntu@54.253.129.59:/tmp/add2vals
+                        scp -o StrictHostKeyChecking=no dist/add2vals ubuntu@13.210.12.187:/tmp/add2vals
                         
                         # Move the binary to a system path and set permissions on the remote server
-                        ssh -o StrictHostKeyChecking=no ubuntu@54.253.129.59 'sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals'
+                        ssh -o StrictHostKeyChecking=no ubuntu@13.210.12.187 'sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals'
                         
                         echo "Deployment to AWS completed successfully!"
                     '''
