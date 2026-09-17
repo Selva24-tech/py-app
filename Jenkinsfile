@@ -16,19 +16,21 @@ pipeline {
                 sh 'python3 -m py_compile sources/add2vals.py sources/calc.py'
             }
         }
-    stage('Test') {
-    steps {
-        sh './venv/bin/pytest --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+        
+        stage('Test') {
+            steps {
+                sh './venv/bin/pytest --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
             }
-           }
             post {
                 always {
                     junit 'test-reports/results.xml'
                 }
             }
+        }
+        
         stage('Deliver') {
             steps {
-                sh 'python3 -m PyInstaller --onefile sources/add2vals.py'
+                sh './venv/bin/pyinstaller --onefile sources/add2vals.py'
             }
             post {
                 success {
@@ -36,6 +38,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Deploy to AWS') {
             steps {
                 sshagent(credentials: ['sla32']) {
