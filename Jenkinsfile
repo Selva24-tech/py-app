@@ -38,18 +38,17 @@ pipeline {
                 }
             }
         }
-        
         stage('Deploy to AWS') {
             steps {
-                sshagent(credentials: ['sla32']) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'sla32', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'SSH_USER')]) {
                     sh '''
                         echo "Copying binary to AWS EC2 instance..."
                         
-                        # Copy the compiled binary via SCP to your EC2 instance
-                        scp -o StrictHostKeyChecking=no dist/add2vals ubuntu@13.210.12.187:/tmp/add2vals
+                        # Copy the compiled binary via SCP using the temporary identity file
+                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "$SSH_USER@13.210.12.187:/tmp/add2vals"
                         
                         # Move the binary to a system path and set permissions on the remote server
-                        ssh -o StrictHostKeyChecking=no ubuntu@13.210.12.187 'sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals'
+                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "$SSH_USER@13.210.12.187" 'sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals'
                         
                         echo "Deployment to AWS completed successfully!"
                     '''
