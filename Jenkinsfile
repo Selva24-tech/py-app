@@ -19,8 +19,8 @@ pipeline {
     stage('Test') {
     steps {
         sh './venv/bin/pytest --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
-    }
-}
+            }
+           }
             post {
                 always {
                     junit 'test-reports/results.xml'
