@@ -43,8 +43,10 @@
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'Sla', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'KissaKish08')]) {
                     sh '''
-                        echo "Configuring private key permissions..."
+                       
                         chmod 600 "$IDENTITY_FILE"
+                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals KissaKish08@47.129.103.40:/tmp/add2vals
+
                         
                         echo "Copying binary to AWS EC2 instance..."
                         scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "KissaKish08@47.129.103.40:/tmp/add2vals"
