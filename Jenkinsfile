@@ -45,7 +45,7 @@
                     sh '''
                        
                         chmod 600 "$IDENTITY_FILE"
-                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals KissaKish08@47.129.103.40:/tmp/add2vals
+                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals ubuntu@47.129.103.40:/tmp/add2vals
 
                         
                         echo "Copying binary to AWS EC2 instance..."
