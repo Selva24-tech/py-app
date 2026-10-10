@@ -41,16 +41,16 @@
         
         stage('Deploy to AWS') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'Sla', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'SSH_USER')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'Sla', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'KissaKish08')]) {
                     sh '''
                         echo "Configuring private key permissions..."
                         chmod 600 "$IDENTITY_FILE"
                         
                         echo "Copying binary to AWS EC2 instance..."
-                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "$SSH_USER@47.129.103.40:/tmp/add2vals"
+                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "KissaKish08@47.129.103.40:/tmp/add2vals"
                         
                         echo "Moving binary to system path and setting executable permissions..."
-                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "$SSH_USER@47.129.103.40" "sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals"
+                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "KissaKish08@47.129.103.40" "sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals"
                         
                         echo "Deployment to AWS completed successfully!"
                     '''
