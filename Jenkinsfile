@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Deploy to AWS') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'sla32', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'SSH_USER')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'Sla', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'SSH_USER')]) {
                     sh '''
                         echo "Copying binary to AWS EC2 instance..."
                         
