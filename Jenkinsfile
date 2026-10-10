@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
     agent any
     stages {
         stage('Install Dependencies') {
@@ -38,17 +38,19 @@ pipeline {
                 }
             }
         }
+        
         stage('Deploy to AWS') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'Sla', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'SSH_USER')]) {
                     sh '''
-                        echo "Copying binary to AWS EC2 instance..."
+                        echo "Configuring private key permissions..."
+                        chmod 600 "$IDENTITY_FILE"
                         
-                        # Copy the compiled binary via SCP using the temporary identity file
+                        echo "Copying binary to AWS EC2 instance..."
                         scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "$SSH_USER@47.129.103.40:/tmp/add2vals"
                         
-                        # Move the binary to a system path and set permissions on the remote server
-                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "$SSH_USER@47.129.103.40" 'sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals'
+                        echo "Moving binary to system path and setting executable permissions..."
+                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "$SSH_USER@47.129.103.40" "sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals"
                         
                         echo "Deployment to AWS completed successfully!"
                     '''
