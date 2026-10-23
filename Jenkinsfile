@@ -41,18 +41,18 @@
         
         stage('Deploy to AWS') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'Sla12', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'ubuntu')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'Sla25', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'ubuntu')]) {
                     sh '''
                        
                         chmod 600 "$IDENTITY_FILE"
-                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals ubuntu@3.220.164.161:/tmp/add2vals
+                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals ubuntu@13.114.132.63:/tmp/add2vals
 
                         
                         echo "Copying binary to AWS EC2 instance..."
-                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "ubuntu@3.220.164.161:/tmp/add2vals"
+                        scp -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no dist/add2vals "ubuntu@13.114.132.63:/tmp/add2vals"
                         
                         echo "Moving binary to system path and setting executable permissions..."
-                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "ubuntu@3.220.164.161" "sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals"
+                        ssh -i "$IDENTITY_FILE" -o StrictHostKeyChecking=no "ubuntu@13.114.132.63" "sudo mv /tmp/add2vals /usr/local/bin/add2vals && sudo chmod +x /usr/local/bin/add2vals"
                         
                         echo "Deployment to AWS completed successfully!"
                     '''
