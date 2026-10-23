@@ -41,7 +41,7 @@
         
         stage('Deploy to AWS') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'Sla25', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'ubuntu')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'sla25', keyFileVariable: 'IDENTITY_FILE', usernameVariable: 'ubuntu')]) {
                     sh '''
                        
                         chmod 600 "$IDENTITY_FILE"
